@@ -1,0 +1,300 @@
+<html>
+  <head>
+		<meta charset="utf-8" />
+		<title>timbre.js synth</title>
+		<link type="text/css" rel="stylesheet" href="css/default.css" />
+		<script type="text/javascript" src="http://mohayonao.github.com/timbre.js/misc/js/jquery.js"></script>
+		<script type="text/javascript" src="http://mohayonao.github.com/timbre.js/timbre.js"></script>
+		<script type="text/javascript" src="http://mohayonao.github.com/timbre.js/src/extras/keyboard.js"></script>
+		<style>
+
+#canvas {
+	position:fixed;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	z-index: -10;
+	}
+		
+.v-range {
+	height: 100px;
+	width: 50px;
+	-webkit-appearance:slider-vertical;
+}
+
+.value {
+	width: 50px;
+	text-align: center;
+
+}
+
+.column {
+	float: left;
+}			
+
+.spacer {
+	padding: 10px;
+	float: left;
+}
+.label {
+	margin: 10px;
+	display: inline;
+	
+}
+
+.select {
+	width: 50px;
+}
+
+		</style>
+		</head>
+	<body>
+		<canvas id="canvas"></canvas>
+		<p>
+			<input type="button" id="play" value="Stop" />
+		</p>
+		<pre class="label">Osc1</pre><br />
+		<div class="column">
+			<input type="range" id="osc1_freq_slider" class="v-range" min="-100" max="200" step="0.01" value="0" /><br />
+			<pre class="label">Freq</pre><br />
+			<input type="text" id="osc1_freq_box" class="value" value="0" />
+		</div>
+		<div class="column">
+			<input type="range" id="osc1_fine_slider" class="v-range" min="-5" max="5" step="0.01" value="0" /><br />
+			<pre class="label">Fine</pre><br />
+			<input type="text" id="osc1_fine_box" class="value" value="0" />
+		</div>
+		<div class="column">
+			<input type="range" id="osc1_mul_slider" class="v-range" min="0" max="1" step="0.01" value="0.25" /><br />
+			<pre class="label">Mult</pre><br />
+			<input type="text" id="osc1_mul_box" class="value" value="0.25" />
+		</div>
+		<div class="column">
+			<input type="range" id="osc1_add_slider" class="v-range" min="0" max="1" step="0.01" value="0" /><br />
+			<pre class="label">Add</pre><br />
+			<input type="text" id="osc1_add_box" class="value" value="0" />
+		</div>
+		<div class="spacer"></div>
+		<div class="column">
+		<pre class="label">Wave</pre><br />
+		<select class="select" id="osc1_wave">
+			<option value="sin">Sin</option>
+			<option value="cos">Cos</option>
+			<option value="pulse">Pul</option>
+			<option value="tri">Tri</option>
+			<option value="saw">Saw</option>
+			<option value="fami">Fam</option>
+			<option value="konami">Kon</option>
+		</select><br />
+		<pre class="label">Oct</pre><br />
+		<select class="select" id="osc1_octave">
+			<option value="3">3</option>
+			<option value="2">2</option>
+			<option value="1">1</option>
+			<option value="0" selected="selected">0</option>
+			<option value="-1">-1</option>
+			<option value="-2">-2</option>
+			<option value="-3">-3</option>
+		</select><br />
+		<pre class="label">Filt</pre><br />
+		<select class="select" id="vcf1_filter">
+			<option value="lpf" selected="selected">LPF</option>
+			<option value="hpf">HPF</option>
+			<option value="bpf">BPF</option>
+			<option value="lowshelf">LSF</option>
+			<option value="highshelf">HSF</option>
+			<option value="peaking">Peak</option>
+			<option value="notch">Notch</option>
+			<option value="apf">APF</option>
+		</select>
+		</div>
+		<div class="spacer"></div>
+		<div class="column">
+			<input type="range" id="vcf1_cutoff_slider" class="v-range" min="0" max="5000" step="0.01" value="500" /><br />
+			<pre class="label">Cut</pre><br />
+			<input type="text" id="vcf1_cutoff_box" class="value" value="500" />
+		</div>
+		<div class="column">
+			<input type="range" id="vcf1_q_slider" class="v-range" min="0" max="250" step="0.01" value="1" /><br />
+			<pre class="label">Q</pre><br />
+			<input type="text" id="vcf1_q_box" class="value" value="1" />
+		</div>
+		<div class="column">
+			<input type="range" id="vcf1_gain_slider" class="v-range" min="-30" max="30" step="0.01" value="0" /><br />
+			<pre class="label">Gain</pre><br />
+			<input type="text" id="vcf1_gain_box" class="value" value="0" />
+		</div>
+		<div class="spacer"></div>
+		<div class="column">
+			<input type="range" id="env1_a_slider" class="v-range" min="0" max="500" step="0.01" value="250" /><br />
+			<pre class="label">A</pre><br />
+			<input type="text" id="env1_a_box" class="value" value="250" />
+		</div>
+		<div class="column">
+			<input type="range" id="env1_d_slider" class="v-range" min="0" max="500" step="0.01" value="250" /><br />
+			<pre class="label">D</pre><br />
+			<input type="text" id="env1_d_box" class="value" value="250" />
+		</div>
+		<div class="column">
+			<input type="range" id="env1_s_slider" class="v-range" min="0" max="1" step="0.01" value="0.5" /><br />
+			<pre class="label">S</pre><br />
+			<input type="text" id="env1_s_box" class="value" value="0.5" />
+		</div>
+		<div class="column">
+			<input type="range" id="env1_r_slider" class="v-range" min="0" max="2500" step="0.01" value="1250" /><br />
+			<pre class="label">R</pre><br />
+			<input type="text" id="env1_r_box" class="value" value="1000" />
+		</div>
+
+		<script>
+
+$(function() {
+
+var osc1, vcf1, env1;
+var keydict = T("ndict.key");
+var midicps = T("midicps");
+var synth = T("SynthDef");
+
+synth.play();
+
+T("scope", {interval:200}).on("data", function() {
+	this.plot({target:canvas, lineWidth: "0.5", background: "#FFFFFF", foreground: "#000000" });
+}).listen(synth);
+
+synth.def = function(options) {
+
+	console.dir(options);
+	
+	var osc1_mul = Number($("#osc1_mul_slider").val());
+	var osc1_add = Number($("#osc1_add_slider").val());
+	var osc1_wave = $("#osc1_wave").val();
+
+	var vcf1_filter = $("#vcf1_filter").val();
+	var vcf1_cutoff = Number($("#vcf1_cutoff_slider").val());
+	var vcf1_q = Number($("#vcf1_q_slider").val());
+	var vcf1_gain = Number($("#vcf1_gain_slider").val());	
+
+	var env1_a = Number($("#env1_a_slider").val());
+	var env1_d = Number($("#env1_d_slider").val());
+	var env1_s = Number($("#env1_s_slider").val());
+	var env1_r = Number($("#env1_r_slider").val());
+	
+	window.osc1 = T(osc1_wave, {freq:options.freq, mul:osc1_mul, add:osc1_add});
+	window.vcf1 = T(vcf1_filter, {freq: vcf1_cutoff, cutoff: vcf1_cutoff, res: vcf1_q, Q: vcf1_q, gain: vcf1_gain}, window.osc1);
+	window.env1 = T("adsr", {a:env1_a, d:env1_d, s:env1_s, r:env1_r, lv:0.5});
+	
+	var vco1 = window.env1.append(window.vcf1).bang();
+	
+	return vco1;
+
+	};
+
+	T("keyboard").on("keydown", function(event) {
+		var midi = keydict.at(event.keyCode);
+		if (midi) {
+			var octave = $("#osc1_octave").val();
+			octave = octave * 12;
+			midi = midi + octave;
+			var fine = Number($("#osc1_fine_slider").val());
+			var freq = Number($("#osc1_freq_slider").val());
+			freq = freq + fine + midicps.at(midi);
+			synth.noteOnWithFreq(freq, 100);
+		}
+	}).on("keyup", function(event) {
+		var midi = keydict.at(event.keyCode);
+		if (midi) {
+			var octave = $("#osc1_octave").val();
+			octave = octave * 12;
+			midi = midi + octave;
+			var fine = Number($("#osc1_fine_slider").val());
+			var freq = Number($("#osc1_freq_slider").val());
+			freq = freq + fine + midicps.at(midi);
+			synth.noteOffWithFreq(freq);
+		}
+	}).start();
+
+	$("#osc1_freq_slider").change(function() {
+		var fine = Number($("#osc1_fine_slider").val());
+		var freq = Number($("#osc1_freq_slider").val());
+		var value = freq + fine;
+		$("#osc1_freq_box").val(freq);
+		window.osc1.freq = value;
+	});
+	$("#osc1_fine_slider").change(function() {
+		var fine = Number($("#osc1_fine_slider").val());
+		var freq = Number($("#osc1_freq_slider").val());
+		var value = freq + fine;
+		$("#osc1_fine_box").val(fine);
+		window.osc1.freq = value;
+	});
+	$("#osc1_mul_slider").change(function() {
+		var value = Number($("#osc1_mul_slider").val());
+		$("#osc1_mul_box").val(value);
+		window.osc1.mul = value;
+	});
+	$("#osc1_add_slider").change(function() {
+		var value = Number($("#osc1_add_slider").val());
+		$("#osc1_add_box").val(value);
+		window.osc1.add = value;
+	});
+	$("#osc1_wave").change(function() {
+		var value = $("#osc1_wave").val();
+		window.osc1.wave = value;
+	});
+	$("#vcf1_filter").change(function() {
+		var value = $("#vcf1_filter").val();
+		window.vcf1.filter = value;
+	});
+	$("#vcf1_cutoff_slider").change(function() {
+		var value = Number($("#vcf1_cutoff_slider").val());
+		$("#vcf1_cutoff_box").val(value);
+		window.vcf1.cutoff = value;
+		window.vcf1.freq = value;
+	});
+	$("#vcf1_q_slider").change(function() {
+		var value = Number($("#vcf1_q_slider").val());
+		$("#vcf1_q_box").val(value);
+		window.vcf1.res = value;
+		window.vcf1.Q = value;
+	});
+	$("#vcf1_gain_slider").change(function() {
+		var value = Number($("#vcf1_gain_slider").val());
+		$("#vcf1_gain_box").val(value);
+		window.vcf1.gain = value;
+	});
+	$("#env1_a_slider").change(function() {
+		var value = Number($("#env1_a_slider").val());
+		$("#env1_a_box").val(value);
+		window.env1.a = value;
+	});
+	$("#env1_d_slider").change(function() {
+		var value = Number($("#env1_d_slider").val());
+		$("#env1_d_box").val(value);
+		window.env1.d = value;
+	});
+	$("#env1_s_slider").change(function() {
+		var value = Number($("#env1_s_slider").val());
+		$("#env1_s_box").val(value);
+		window.env1.s = value;
+	});
+	$("#env1_r_slider").change(function() {
+		var value = Number($("#env1_r_slider").val());
+		$("#env1_r_box").val(value);
+		window.env1.r = value;
+	});
+	$("#play").click(function() {
+		var value = $(this).val();
+		if ( value == "Play" ) {
+			$("#play").val("Stop");
+			synth.play();
+		}
+		else {
+			$("#play").val("Play");
+			synth.pause();
+		}
+	});
+});
+		</script>
+	</body>
+</html>
